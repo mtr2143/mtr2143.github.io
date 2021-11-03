@@ -10,7 +10,7 @@ output:
 
 <img src = "images/IMG_4528.jpg" style = "width:30%">
 
-An ardent fan of all things Real Housewives, California (except R**g*n), and seltzer. 
+An ardent fan of all things Real Housewives, California (except R&ast;&ast;g&ast;n), and seltzer. 
 
 # Where do I go from here?
 
