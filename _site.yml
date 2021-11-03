@@ -9,6 +9,8 @@ navbar:
       href: mailto:<mtr2143@cumc.columbia.edu>
     - icon: fa-github fa-lg
       href: http://github.com/<mtr2143>/
+    - icon: fab fa-linkedin
+      href: http://linkedin.com/in/matthew-russell-1b8627207/
 output:
   html_document:
     theme: paper

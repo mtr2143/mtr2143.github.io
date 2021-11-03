@@ -1,11 +1,13 @@
 ---
-title: "My awesome website"
+title: "Matthew Russell"
 output: 
   html_document:
     toc: true
     toc_float: true
 ---
 
-# This is Matthew's website
+<img src = "images/IMG_4528.jpg" style = "width:30%">
 
-You can learn some things about me [here](about.html).
+An ardent fan of all things Real Housewives, California (except R**g*n), and cinnamon. 
+
+If you're eager to learn more, click [here](about.html).

@@ -5,5 +5,33 @@ output:
     toc: true
     toc_float: true
 ---
+# Academic Experience
+### Columbia University Mailman School of Public Health
+#### New York, NY  
+Masters of Public Health in Epidemiology, expected May 2022  
+Certificate in Applied Biostatistics and Public Health Data Science  
+Cumulative GPA: 4.165/4.33  
+Relevant coursework: Data Science I, Applied Regression I & II, Categorical Data Analysis  
+  
+### University of California, Davis
+#### Davis, CA  
+Bachelors of Science in Applied Statistics, March 2016  
+Relevant coursework: Time Series Analysis, Programming and Problem Solving
 
-Learn some things about me 
+
+# Professional Experience
+### Research Assistant
+#### Columbia University Mailman School of Public Health
+#### May 2021 - Sept. 2021
+Performed all data tidying, cleaning, and organizing to prime data for analysis  
+Taught self to use R to perform basic and advanced statistical methods such as multiple imputations and generalized random forests  
+Met with Principal Investigator on a weekly basis to ensure project's success  
+
+
+### Treatment Clinician
+#### Lice Clinics of America
+#### Mar. 2019 - Jan. 2020
+Provided meticulous, high-quality care for clients while promoting safe practices to reduce risk of re-infestation  
+Worked intimately with clients with financial hardshisp and high levels of emotional distress to provide customizable and affordable options for treatment  
+Operated the clinic without supervision including seeing clients, opening and closing the clinic, and closing the cash register
+
