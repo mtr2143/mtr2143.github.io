@@ -5,3 +5,12 @@ output:
     toc: true
     toc_float: true
 ---
+
+```{r, load packages, message=FALSE}
+library(tidyverse)
+```
+
+```{r, load data, message=FALSE}
+weather_df <- read_csv("./data/nynoaadat.csv")
+```
+
