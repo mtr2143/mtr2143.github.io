@@ -8,6 +8,6 @@ output:
 
 <img src = "images/IMG_4528.jpg" style = "width:30%">
 
-An ardent fan of all things Real Housewives, California (except R**g*n), and cinnamon. 
+An ardent fan of all things Real Housewives, California (except R**g*n), and seltzer. 
 
 If you're eager to learn more, click [here](about.html).
