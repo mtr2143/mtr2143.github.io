@@ -6,9 +6,13 @@ output:
     toc_float: true
 ---
 
+# Hey, it's me!
+
 <img src = "images/IMG_4528.jpg" style = "width:30%">
 
 An ardent fan of all things Real Housewives, California (except R**g*n), and seltzer. 
+
+# Where do I go from here?
 
 If you're eager to learn more about me, click [here](about.html).  
 If you'd rather see what I did for **Problem 2**, click [here](prob_2.html).
