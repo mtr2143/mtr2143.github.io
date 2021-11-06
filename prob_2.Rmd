@@ -46,20 +46,21 @@ weather <-
 To clean the weather data, I converted the temperature columns (`tmin`, `tmax`) from Celsius to Fahrenheit and all weather-related observations from millimeters to inches (`prcp`, `snow`, `snwd`). I then removed any observations where all weather-related data was missing and any observations that exceeded records for hottest and coldest temperature, precipitation, snowfall, and snow depth. These records can be sourced from the NOAA [here](https://www.ncdc.noaa.gov/extremes/scec/records/ny).
 
 ```{r, boxplot snowfall in December by decade, message=FALSE}
-weather %>% 
-  filter(month == "December") %>% 
-  mutate(
-    decade = case_when(
-      year %in% as.character(1981:1989) ~ "80s", 
-      year %in% as.character(1990:1999) ~ "90s", 
-      year %in% as.character(2000:2009) ~ "00s"
+snowfall_per_decade <-
+  weather %>% 
+    filter(month == "December") %>% 
+    mutate(
+      decade = case_when(
+        year %in% as.character(1981:1989) ~ "80s", 
+        year %in% as.character(1990:1999) ~ "90s", 
+        year %in% as.character(2000:2009) ~ "00s"
+      ) %>% 
+        factor(levels = c("80s", "90s", "00s"))
     ) %>% 
-      factor(levels = c("80s", "90s", "00s"))
-  ) %>% 
-  plot_ly(y = ~snow, color = ~decade, type = "box", colors = "viridis") %>% 
-  layout(title = "Snowfall in December per Decade", 
-         yaxis = list(title = "Snowfall (in)"), 
-         legend = list(title = list(text = "<b> Decade </b>")))
+    plot_ly(y = ~snow, color = ~decade, type = "box", colors = "viridis") %>% 
+    layout(title = "Snowfall in December per Decade", 
+           yaxis = list(title = "Snowfall (in)"), 
+           legend = list(title = list(text = "<b> Decade </b>")))
 ```
 
 When comparing the snowfall seen in December of each decade, the boxplots are largely identical. All decades have a median around 0 inches and do not have an upper bound much higher than 0 itself. Each boxplot also has many observations that hover beyond the error bars. This is expected: these observations likely represent intense snowstorms that produce much more snow than on average. 
@@ -72,13 +73,14 @@ precip_bar <-
       total_rain = sum(prcp)
     )
 
-precip_bar %>% 
-  plot_ly(x = ~year, y = ~total_rain, color = ~month, type = "bar") %>% 
-  layout(title = "Precipitation per Year",
-         yaxis = list(title = "Total Precipitation (in)"),
-         xaxis = list(title = ""),
-         legend = list(title = list(text = "<b> Month </b>")),
-         barmode = "stack")
+precip_bar <-
+  precip_bar %>% 
+    plot_ly(x = ~year, y = ~total_rain, color = ~month, type = "bar") %>% 
+    layout(title = "Precipitation per Year",
+           yaxis = list(title = "Total Precipitation (in)"),
+           xaxis = list(title = ""),
+           legend = list(title = list(text = "<b> Month </b>")),
+           barmode = "stack")
 
 ```
 

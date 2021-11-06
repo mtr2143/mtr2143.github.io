@@ -15,4 +15,4 @@ An ardent fan of all things Real Housewives, California (except R&ast;&ast;g&ast
 # Where do I go from here?
 
 If you're eager to learn more about me, click [here](about.html).  
-If you'd rather see what I did for **Problem 2**, click [here](prob_2.html).
+If you'd rather see what I did for **Problem 2**, click [here](prob_2.html), and click [here](dashboard.html) to view the plots. 
