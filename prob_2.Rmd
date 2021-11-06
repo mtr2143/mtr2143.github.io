@@ -17,14 +17,13 @@ weather_df <- read_csv("./data/nynoaadat.csv")
 
 weather <-
   weather_df %>% 
-    filter(!(across(c(prcp, tmin), is.na))) %>% 
-    filter(tmax <= 108 & tmax >= -52) %>% 
-    filter(tmin <= 108 & tmin >= -52) %>% 
-    filter(tmax > tmin) %>% 
     mutate(
       id = factor(id), 
       tmin = (1.8 * tmin) + 32, 
-      tmax = (1.8 * tmax) + 32, 
+      tmax = (1.8 * tmax) + 32,
+      prcp = prcp/25.4,
+      snow = snow/25.4,
+      snwd = snwd/25.4,
       year = year(date) %>% 
         factor(ordered = T), 
       month = month(date) %>%
@@ -32,16 +31,55 @@ weather <-
       day = day(date) %>% 
         factor(ordered = T)
     ) %>% 
+    filter(!(across(c(prcp, tmin), is.na))) %>% 
+    filter(tmax <= 108 & tmax >= -52) %>% 
+    filter(tmin <= 108 & tmin >= -52) %>% 
+    filter(tmax > tmin) %>% 
+    filter(prcp <= 13.57) %>% 
+    filter(snow <= 50) %>% 
+    filter(snwd <= 119) %>% 
     select(-date) %>% 
     relocate(c(year, month, day), .after = id) %>% 
     arrange(year, month, day, id)
 ```
 
-To clean the weather data, I converted the temperature columns (`tmin`, `tmax`) from Celsius to Fahrenheit. I then removed any observations where all weather-related data was missing and any observations where either the maximum temperature was less than minimum temperature or the minimum temperature was greater than the maximum temperature. I also noticed many extremely high and low temperature values, so I excluded any temperature value that was outside the hottest and coldest recorded temperatures in New York state which was a maximum of 108°F and a minimum of -52°F. These records can be sourced from the NOAA [here](https://www.ncdc.noaa.gov/extremes/scec/records/ny).
+To clean the weather data, I converted the temperature columns (`tmin`, `tmax`) from Celsius to Fahrenheit and all weather-related observations from millimeters to inches (`prcp`, `snow`, `snwd`). I then removed any observations where all weather-related data was missing and any observations that exceeded records for hottest and coldest temperature, precipitation, snowfall, and snow depth. These records can be sourced from the NOAA [here](https://www.ncdc.noaa.gov/extremes/scec/records/ny).
 
-```{r, boxplot snowfall by year, message=FALSE}
+```{r, boxplot snowfall in December by decade, message=FALSE}
 weather %>% 
-  mutate(year = fct_reorder(year, snow)) %>% 
-  plot_ly(y = ~snow, color = ~year, type = "box", colors = "viridis")
+  filter(month == "December") %>% 
+  mutate(
+    decade = case_when(
+      year %in% as.character(1981:1989) ~ "80s", 
+      year %in% as.character(1990:1999) ~ "90s", 
+      year %in% as.character(2000:2009) ~ "00s"
+    ) %>% 
+      factor(levels = c("80s", "90s", "00s"))
+  ) %>% 
+  plot_ly(y = ~snow, color = ~decade, type = "box", colors = "viridis") %>% 
+  layout(title = "Snowfall in December per Decade", 
+         yaxis = list(title = "Snowfall (in)"), 
+         legend = list(title = list(text = "<b> Decade </b>")))
 ```
 
+When comparing the snowfall seen in December of each decade, the boxplots are largely identical. All decades have a median around 0 inches and do not have an upper bound much higher than 0 itself. Each boxplot also has many observations that hover beyond the error bars. This is expected: these observations likely represent intense snowstorms that produce much more snow than on average. 
+
+```{r, barchart precipitation per year, message=FALSE}
+precip_bar <-
+  weather %>% 
+    group_by(year, month) %>% 
+    summarize(
+      total_rain = sum(prcp)
+    )
+
+precip_bar %>% 
+  plot_ly(x = ~year, y = ~total_rain, color = ~month, type = "bar") %>% 
+  layout(title = "Precipitation per Year",
+         yaxis = list(title = "Total Precipitation (in)"),
+         xaxis = list(title = ""),
+         legend = list(title = list(text = "<b> Month </b>")),
+         barmode = "stack")
+
+```
+
+While it is helpful to look at the precipitation over the years of observation, there are some limitations. Some years, such as 1981, do not have observations for every month of the year, which gives the appearance of less precipitation when that might not actually be the case. Regardless over each year, we observe that most of the precipitation occurs in November and December, bar a few exceptions such as 1983 where we observe more rain in January through April.
