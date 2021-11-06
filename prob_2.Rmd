@@ -83,3 +83,26 @@ precip_bar %>%
 ```
 
 While it is helpful to look at the precipitation over the years of observation, there are some limitations. Some years, such as 1981, do not have observations for every month of the year, which gives the appearance of less precipitation when that might not actually be the case. Regardless over each year, we observe that most of the precipitation occurs in November and December, bar a few exceptions such as 1983 where we observe more rain in January through April.
+
+```{r, average snowdepth over time, message=FALSE}
+avg_depth <-
+  weather %>% 
+    mutate(
+      date = make_date(as.character(year), month, day)
+    ) %>% 
+    group_by(date) %>% 
+    summarize(
+      avg_snwd = mean(snwd)
+    )
+
+avg_depth_chart <- 
+  avg_depth %>% 
+  plot_ly(type = "scatter", mode = "lines") %>%
+    add_trace(x = ~date, y = ~avg_snwd, name = "avg_snwd" ) %>%
+    layout(showlegend = F, 
+           title = "Average Snow Depth over Time",
+           yaxis = list(title = "Average Snow Depth (in)"),
+           xaxis = list(title = "")
+           )
+```
+
