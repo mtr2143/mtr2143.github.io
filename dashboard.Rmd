@@ -19,7 +19,7 @@ Column {data-width=650}
 ### Chart A
 
 ```{r}
-
+snowfall_per_decade
 ```
 
 Column {data-width=350}
@@ -28,11 +28,15 @@ Column {data-width=350}
 ### Chart B
 
 ```{r}
-
+precip_bar
 ```
 
 ### Chart C
 
 ```{r}
+avg_depth_chart
+```
 
+```{r}
+rmarkdown::render("dashboard.Rmd", output_format = "flexdashboard::flex_dashboard")
 ```
