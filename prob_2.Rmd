@@ -73,15 +73,13 @@ precip_bar <-
       total_rain = sum(prcp)
     )
 
-precip_bar <-
-  precip_bar %>% 
+precip_bar %>% 
     plot_ly(x = ~year, y = ~total_rain, color = ~month, type = "bar") %>% 
     layout(title = "Precipitation per Year",
            yaxis = list(title = "Total Precipitation (in)"),
            xaxis = list(title = ""),
            legend = list(title = list(text = "<b> Month </b>")),
            barmode = "stack")
-
 ```
 
 While it is helpful to look at the precipitation over the years of observation, there are some limitations. Some years, such as 1981, do not have observations for every month of the year, which gives the appearance of less precipitation when that might not actually be the case. Regardless over each year, we observe that most of the precipitation occurs in November and December, bar a few exceptions such as 1983 where we observe more rain in January through April.

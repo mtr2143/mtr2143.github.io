@@ -1,16 +1,45 @@
 ---
-title: "Untitled"
+title: "Dashboard"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
     vertical_layout: fill
 ---
 
-```{r setup, include=FALSE}
+```{r, include=FALSE}
 library(flexdashboard)
 library(tidyverse)
 library(lubridate)
 library(plotly)
+
+weather_df <- read_csv("./data/nynoaadat.csv")
+
+weather <-
+  weather_df %>% 
+    mutate(
+      id = factor(id), 
+      tmin = (1.8 * tmin) + 32, 
+      tmax = (1.8 * tmax) + 32,
+      prcp = prcp/25.4,
+      snow = snow/25.4,
+      snwd = snwd/25.4,
+      year = year(date) %>% 
+        factor(ordered = T), 
+      month = month(date) %>%
+        factor(ordered = T, labels = month.name),
+      day = day(date) %>% 
+        factor(ordered = T)
+    ) %>% 
+    filter(!(across(c(prcp, tmin), is.na))) %>% 
+    filter(tmax <= 108 & tmax >= -52) %>% 
+    filter(tmin <= 108 & tmin >= -52) %>% 
+    filter(tmax > tmin) %>% 
+    filter(prcp <= 13.57) %>% 
+    filter(snow <= 50) %>% 
+    filter(snwd <= 119) %>% 
+    select(-date) %>% 
+    relocate(c(year, month, day), .after = id) %>% 
+    arrange(year, month, day, id)
 ```
 
 Column {data-width=650}
@@ -19,7 +48,24 @@ Column {data-width=650}
 ### Chart A
 
 ```{r}
-snowfall_per_decade
+avg_depth <-
+  weather %>% 
+    mutate(
+      date = make_date(as.character(year), month, day)
+    ) %>% 
+    group_by(date) %>% 
+    summarize(
+      avg_snwd = mean(snwd)
+    )
+
+avg_depth %>% 
+  plot_ly(type = "scatter", mode = "lines") %>%
+    add_trace(x = ~date, y = ~avg_snwd, name = "avg_snwd" ) %>%
+    layout(showlegend = F, 
+           title = "Average Snow Depth over Time",
+           yaxis = list(title = "Average Snow Depth (in)"),
+           xaxis = list(title = "")
+           )
 ```
 
 Column {data-width=350}
@@ -28,15 +74,37 @@ Column {data-width=350}
 ### Chart B
 
 ```{r}
-precip_bar
+weather %>% 
+    filter(month == "December") %>% 
+    mutate(
+      decade = case_when(
+        year %in% as.character(1981:1989) ~ "80s", 
+        year %in% as.character(1990:1999) ~ "90s", 
+        year %in% as.character(2000:2009) ~ "00s"
+      ) %>% 
+        factor(levels = c("80s", "90s", "00s"))
+    ) %>% 
+    plot_ly(y = ~snow, color = ~decade, type = "box", colors = "viridis") %>% 
+    layout(title = "Snowfall in December per Decade", 
+           yaxis = list(title = "Snowfall (in)"), 
+           legend = list(title = list(text = "<b> Decade </b>")))
 ```
 
 ### Chart C
 
 ```{r}
-avg_depth_chart
-```
+precip_bar <-
+  weather %>% 
+    group_by(year, month) %>% 
+    summarize(
+      total_rain = sum(prcp)
+    )
 
-```{r}
-rmarkdown::render("dashboard.Rmd", output_format = "flexdashboard::flex_dashboard")
+precip_bar %>% 
+    plot_ly(x = ~year, y = ~total_rain, color = ~month, type = "bar") %>% 
+    layout(title = "Precipitation per Year",
+           yaxis = list(title = "Total Precipitation (in)"),
+           xaxis = list(title = ""),
+           legend = list(title = list(text = "<b> Month </b>")),
+           barmode = "stack")
 ```
