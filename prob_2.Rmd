@@ -8,9 +8,40 @@ output:
 
 ```{r, load packages, message=FALSE}
 library(tidyverse)
+library(lubridate)
+library(plotly)
 ```
 
 ```{r, load data, message=FALSE}
 weather_df <- read_csv("./data/nynoaadat.csv")
+
+weather <-
+  weather_df %>% 
+    filter(!(across(c(prcp, tmin), is.na))) %>% 
+    filter(tmax <= 108 & tmax >= -52) %>% 
+    filter(tmin <= 108 & tmin >= -52) %>% 
+    filter(tmax > tmin) %>% 
+    mutate(
+      id = factor(id), 
+      tmin = (1.8 * tmin) + 32, 
+      tmax = (1.8 * tmax) + 32, 
+      year = year(date) %>% 
+        factor(ordered = T), 
+      month = month(date) %>%
+        factor(ordered = T, labels = month.name),
+      day = day(date) %>% 
+        factor(ordered = T)
+    ) %>% 
+    select(-date) %>% 
+    relocate(c(year, month, day), .after = id) %>% 
+    arrange(year, month, day, id)
+```
+
+To clean the weather data, I converted the temperature columns (`tmin`, `tmax`) from Celsius to Fahrenheit. I then removed any observations where all weather-related data was missing and any observations where either the maximum temperature was less than minimum temperature or the minimum temperature was greater than the maximum temperature. I also noticed many extremely high and low temperature values, so I excluded any temperature value that was outside the hottest and coldest recorded temperatures in New York state which was a maximum of 108°F and a minimum of -52°F. These records can be sourced from the NOAA [here](https://www.ncdc.noaa.gov/extremes/scec/records/ny).
+
+```{r, boxplot snowfall by year, message=FALSE}
+weather %>% 
+  mutate(year = fct_reorder(year, snow)) %>% 
+  plot_ly(y = ~snow, color = ~year, type = "box", colors = "viridis")
 ```
 
