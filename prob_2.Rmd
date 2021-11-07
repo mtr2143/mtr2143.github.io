@@ -6,6 +6,8 @@ output:
     toc_float: true
 ---
 
+This page provides the code I used to create my dashboard along with commentary on the plots I created. To view the dashboard itself, click [here](dashboard.html).
+
 ```{r, load packages, message=FALSE}
 library(tidyverse)
 library(lubridate)
