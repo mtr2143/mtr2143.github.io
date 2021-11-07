@@ -46,8 +46,7 @@ weather <-
 To clean the weather data, I converted the temperature columns (`tmin`, `tmax`) from Celsius to Fahrenheit and all weather-related observations from millimeters to inches (`prcp`, `snow`, `snwd`). I then removed any observations where all weather-related data was missing and any observations that exceeded records for hottest and coldest temperature, precipitation, snowfall, and snow depth. These records can be sourced from the NOAA [here](https://www.ncdc.noaa.gov/extremes/scec/records/ny).
 
 ```{r, boxplot snowfall in December by decade, message=FALSE}
-snowfall_per_decade <-
-  weather %>% 
+weather %>% 
     filter(month == "December") %>% 
     mutate(
       decade = case_when(
@@ -95,8 +94,7 @@ avg_depth <-
       avg_snwd = mean(snwd)
     )
 
-avg_depth_chart <- 
-  avg_depth %>% 
+avg_depth %>% 
   plot_ly(type = "scatter", mode = "lines") %>%
     add_trace(x = ~date, y = ~avg_snwd, name = "avg_snwd" ) %>%
     layout(showlegend = F, 
@@ -106,3 +104,4 @@ avg_depth_chart <-
            )
 ```
 
+The plot above shows the average snow depth for every available day of observation from 1981 to 2010. Due to limitations of data availability, we see major jumps occasionally. For example, in 1982, the average from March 12 to March 14 goes from 5.98 to 41.50 to 9.80 respectively. Most observations are zero or approximately zero.
