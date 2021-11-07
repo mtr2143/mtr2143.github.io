@@ -42,7 +42,7 @@ weather <-
     arrange(year, month, day, id)
 ```
 
-Column {data-width=650}
+Column {data-width=500}
 -----------------------------------------------------------------------
 
 ### Chart A
@@ -68,7 +68,7 @@ avg_depth %>%
            )
 ```
 
-Column {data-width=350}
+Column {data-width=500}
 -----------------------------------------------------------------------
 
 ### Chart B
@@ -108,3 +108,9 @@ precip_bar %>%
            legend = list(title = list(text = "<b> Month </b>")),
            barmode = "stack")
 ```
+
+
+```{r, eval=FALSE}
+rmarkdown::render("dashboard.Rmd", output_format = "flexdashboard::flex_dashboard")
+```
+
